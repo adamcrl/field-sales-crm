@@ -11,3 +11,14 @@ and manage local business prospects.
 
 Real provider integrations and production credentials are intentionally out of
 scope for the first build.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The app ships with
+fictional Dublin businesses and keeps demo CRM changes in the browser during
+your session; no customer or provider data is used.
