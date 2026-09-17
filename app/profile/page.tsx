@@ -1,0 +1,19 @@
+"use client";
+
+import { useState } from "react";
+import { AppShell } from "@/components/app-shell";
+import { Icon } from "@/components/icons";
+import { useApp } from "@/components/app-provider";
+
+export default function ProfilePage() {
+  const { profile, updateProfile } = useApp();
+  const [draft, setDraft] = useState(profile);
+  const [saved, setSaved] = useState(false);
+  const update = (key: keyof typeof draft, value: string) => { setDraft((current) => ({ ...current, [key]: value })); setSaved(false); };
+  const submit = (event: React.FormEvent) => { event.preventDefault(); updateProfile(draft); setSaved(true); };
+  return <AppShell title="Product & ideal customer" subtitle="Define the customers you want to meet. We use this to rank the fictional prospects in this demo." actions={saved ? <span className="inline-flex items-center gap-2 rounded-xl bg-[#e6f7f3] px-4 py-3 text-sm font-bold text-[#0b6d64]"><Icon name="check" className="h-4 w-4" />Changes saved</span> : undefined}>
+    <form onSubmit={submit} className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]"><div className="panel p-5 sm:p-7"><div className="mb-6"><p className="eyebrow">What you sell</p><h2 className="mt-2 text-xl font-black tracking-tight">Your product</h2><p className="mt-1 text-sm leading-6 text-[#718078]">A clear description gives you better conversations in the field.</p></div><div className="space-y-5"><label><span className="field-label">Product or company name</span><input className="field" value={draft.productName} onChange={(e) => update("productName", e.target.value)} /></label><label><span className="field-label">What does it help customers do?</span><textarea className="field min-h-28 resize-y" value={draft.oneLiner} onChange={(e) => update("oneLiner", e.target.value)} /></label></div><div className="my-7 border-t border-[#e6ece8]" /><div className="mb-5"><p className="eyebrow">Who you sell to</p><h2 className="mt-2 text-xl font-black tracking-tight">Ideal customer profile</h2></div><div className="grid gap-5 sm:grid-cols-2"><label className="sm:col-span-2"><span className="field-label">Target industries</span><input className="field" value={draft.industries} onChange={(e) => update("industries", e.target.value)} /></label><label><span className="field-label">Typical team size</span><input className="field" value={draft.teamSize} onChange={(e) => update("teamSize", e.target.value)} /></label><label><span className="field-label">Target area</span><input className="field" value={draft.locations} onChange={(e) => update("locations", e.target.value)} /></label><label className="sm:col-span-2"><span className="field-label">Likely buyer or champion</span><input className="field" value={draft.buyer} onChange={(e) => update("buyer", e.target.value)} /></label></div><button className="btn-primary mt-7 w-full sm:w-auto" type="submit"><Icon name="check" className="h-4 w-4" />Save targeting</button></div>
+      <aside className="panel h-fit overflow-hidden"><div className="bg-[#123d37] px-6 py-6 text-white"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2bb6a5]"><Icon name="spark" className="h-5 w-5" /></div><p className="mt-5 text-lg font-black">How matching works</p><p className="mt-2 text-sm leading-6 text-[#c2d9d4]">The demo ranks each fictional business against the profile you set here.</p></div><div className="space-y-4 p-6">{[["Industry", "Does the business sell in a target category?"], ["Team", "Could the store have the right operating scale?"], ["Location", "Is it within the field territory you defined?"]].map(([title, body], index) => <div className="flex gap-3" key={title}><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#e6f7f3] text-xs font-black text-[#0f766e]">{index + 1}</span><div><p className="text-sm font-bold">{title}</p><p className="mt-1 text-xs leading-5 text-[#718078]">{body}</p></div></div>)}</div></aside>
+    </form>
+  </AppShell>;
+}
