@@ -1,0 +1,2 @@
+# Copy local, ignored development settings into Codex-managed worktrees.
+.env.local
